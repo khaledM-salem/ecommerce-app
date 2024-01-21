@@ -1,0 +1,39 @@
+/* styles/Header.module.css */
+
+.header {
+  @apply flex items-start justify-between bg-gray-800 p-4 text-white; /* Updated to center items */
+}
+
+.title {
+  @apply flex space-x-4 text-2xl font-bold;
+}
+
+.header-links {
+  @apply flex-auto space-x-4; /* Adjust space-x utility here */
+}
+
+.header-links a {
+  @apply hover:text-gray-300;
+}
+
+.right-icons {
+  @apply flex items-start space-x-4;
+}
+
+.cart-icon,
+.profile-icon {
+  @apply flex items-center; /* Combine cart and profile icon styles */
+}
+
+.cart-icon svg,
+.profile-icon svg {
+  @apply w-6 h-6;
+}
+
+.search-area {
+  @apply flex items-center ml-4;
+}
+
+.search-input {
+  @apply bg-gray-700 px-3 py-1 rounded-md focus:outline-none;
+}
