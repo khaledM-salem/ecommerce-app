@@ -1,11 +1,21 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useTranslation } from 'react-i18next';
+
+interface Product {
+  id: number;
+  title: string;
+  color: number;
+  // Add other properties as needed
+}
 
 const PopularProducts: React.FC = () => {
   const [selectedPosition, setSelectedPosition] = useState(0);
+  const [products, setProducts] = useState<Array<Product>>([]);
   const { addToCart, removeFromCart, cart } = useCart();
+  const { t } = useTranslation();
 
   const handleSelection = (cardId: number) => {
     const isInCart = cart.includes(cardId);
@@ -19,18 +29,23 @@ const PopularProducts: React.FC = () => {
     }
   };
 
-  const cards = [
-    { id: 1, title: 'Product 1', color: 'bg-gray-200' },
-    { id: 2, title: 'Product 2', color: 'bg-gray-200' },
-    { id: 3, title: 'Product 3', color: 'bg-gray-200' },
-    { id: 4, title: 'Product 4', color: 'bg-gray-200' },
-    { id: 5, title: 'Product 5', color: 'bg-gray-200' },
-    { id: 6, title: 'Product 6', color: 'bg-gray-200' },
-    { id: 7, title: 'Product 7', color: 'bg-gray-200' },
-    { id: 8, title: 'Product 8', color: 'bg-gray-200' },
-  ];
 
-  const visibleCards = cards.slice(selectedPosition, selectedPosition + 6);
+  const visibleCards = products.slice(selectedPosition, selectedPosition + 6);
+
+  useEffect(() => {
+    // Fetch products when the component mounts
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://mocki.io/v1/dbb636ac-0e5b-4388-8a05-adf78fec7081'); // Replace with your actual API endpoint
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="mt-8 p-4">
@@ -48,7 +63,7 @@ const PopularProducts: React.FC = () => {
                 className="bg-white py-2 px-4 rounded-md border border-gray-300 text-black hover:bg-blue-500 hover:text-white hover:border-transparent transition"
                 onClick={() => handleSelection(card.id)}
               >
-                {cart.includes(card.id) ? 'Remove From Cart' : 'Add To Cart'}
+                {cart.includes(card.id) ?  t('removeFromCart') : t('addToCart')}
               </button>
             </div>
 
